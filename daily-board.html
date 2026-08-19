@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>每日todo&done</title>
+<title>每日每日</title>
+<meta name="theme-color" content="#7AAEA2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="每日每日">
+<link rel="manifest" id="manifestLink">
+<link rel="icon" id="favIcon">
+<link rel="apple-touch-icon" id="appleIcon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Noto+Serif+SC:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
@@ -156,6 +164,24 @@ input[type=date]{font-family:var(--font-body);border:1px solid var(--line);backg
 .board+.board{margin-top:24px;padding-top:22px;border-top:1px solid var(--line-soft)}
 .board-name{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:500;font-size:16px;margin-bottom:10px}
 .board-name .dotm{width:10px;height:10px;border-radius:99px}
+.blk.done .b-title{text-decoration:line-through;text-decoration-color:rgba(0,0,0,.3);opacity:.6}
+.list-head{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:10px;align-items:center}
+.list-head .col-h{padding:0}
+.list-head .todo-h{text-align:left;color:var(--teal)}
+.list-head .done-h{justify-content:flex-start;padding-left:0;color:var(--rose);gap:10px}
+.list-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.list-col{display:flex;flex-direction:column;gap:7px}
+.li{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid rgba(0,0,0,.05);border-left:3px solid var(--tc);border-radius:9px;background:var(--hl);cursor:pointer;--tc:#4b5a56;--hl:#eef2f1;transition:box-shadow .14s}
+.li:hover{box-shadow:var(--shadow-soft)}
+.li.dimmed{opacity:.35}
+.li input{accent-color:var(--tc);margin-top:3px;flex-shrink:0}
+.li .li-time{font-size:10.5px;color:var(--tc);opacity:.65;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:1px}
+.li .li-title{flex:1;font-size:13px;color:var(--tc);word-break:break-word;line-height:1.4}
+.li.done .li-title{text-decoration:line-through;opacity:.5}
+.li .li-note{width:100%;flex-basis:100%;font-size:11px;color:var(--tc);opacity:.75;font-style:italic;padding-left:26px}
+.list-add{border:1px dashed var(--line);background:transparent;border-radius:9px;padding:6px;color:var(--ink-faint);cursor:pointer;font-size:12.5px;font-family:var(--font-body)}
+.list-add:hover{color:var(--ink-soft);border-color:var(--ink-faint)}
+.boards-row>.board-list{min-width:300px}
 .boards-row{display:flex;gap:20px;overflow-x:auto;padding-bottom:8px;align-items:flex-start}
 .boards-row>.board{flex:1 1 360px;min-width:320px;margin-top:0}
 .boards-row .board+.board{margin-top:0;padding-top:0;border-top:none}
@@ -207,6 +233,9 @@ hr.data-div{border:none;border-top:1px solid var(--line-soft);margin:14px 0}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--teal)}
 .time-pair{display:flex;gap:10px;align-items:center}
 .time-pair span{color:var(--ink-faint)}
+.sm-seg{display:inline-flex;background:var(--paper-2);border-radius:99px;padding:3px;margin-bottom:8px}
+.sm-seg button{border:none;background:transparent;padding:5px 13px;border-radius:99px;font-family:var(--font-body);font-size:12.5px;color:var(--ink-soft);cursor:pointer;transition:.15s}
+.sm-seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow-soft)}
 .cat-picker{display:flex;flex-wrap:wrap;gap:7px}
 .cat-opt{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;border:1.5px solid transparent;cursor:pointer;font-size:13px}
 .cat-opt .sw{width:9px;height:9px;border-radius:99px}
@@ -226,13 +255,14 @@ hr.data-div{border:none;border-top:1px solid var(--line-soft);margin:14px 0}
 <div class="wrap">
   <div class="masthead">
     <div class="eyebrow">a gentle plan for the day</div>
-    <h1 class="title">今天想做什么<span class="dot">·</span>做了什么<span class="dot">·</span>复盘</h1>
+    <h1 class="title">每日<span class="dot">·</span>每日</h1>
     <div class="sub">左边计划这一天，右边记录这一天，晚上被追问着复盘这一天。</div>
   </div>
 
   <div class="toolbar">
     <div class="members" id="members"></div>
     <div class="tools-right">
+      <button class="btn tiny" id="installBtn">安装 App</button>
       <button class="btn tiny" id="dataBtn">导入 / 导出</button>
       <div class="date-field"><span class="cn" id="dateCn">8月19日</span><input type="date" id="dateInput"></div>
     </div>
@@ -261,7 +291,7 @@ hr.data-div{border:none;border-top:1px solid var(--line-soft);margin:14px 0}
         <span class="mode-hint" id="tlModeHint"></span>
       </div>
       <div class="board" id="timeline"></div>
-      <div class="board-hint">拖块身 = 移动 · 拖上下边缘 = 改时长（吸附 15 分钟）· 点一下块 = 编辑内容<br>右上角「同步计划到右边」把左侧计划复制到右侧，之后右侧只管记录实际发生的事</div>
+      <div class="board-hint" id="boardHint">拖块身移动 · 拖上下边缘改时长（吸附 15 分钟）· 点块编辑；「同步」把左侧计划复制到右侧</div>
     </div>
   </div>
 
@@ -307,8 +337,16 @@ hr.data-div{border:none;border-top:1px solid var(--line-soft);margin:14px 0}
       <label>时间段</label>
       <div class="time-pair"><input type="time" id="tmStart"><span>至</span><input type="time" id="tmEnd"></div>
     </div>
-    <div class="field"><label>拆成多个时间块（每行一条；行尾可写预计用时，如「背单词 30m」「写数学 1h」，按用时排；不写就在这段时间内平均分）</label>
-      <textarea id="tmSubs" placeholder="1. 背单词 30m&#10;2. 写数学practice 1h&#10;3. 阅读必读书目 45m"></textarea></div>
+    <div class="field">
+      <label>这段时间要做的事</label>
+      <div class="seg sm-seg" id="splitModeSeg">
+        <button type="button" data-sm="blocks">拆成时间块</button>
+        <button type="button" data-sm="list">作为清单</button>
+        <button type="button" data-sm="whole">整块</button>
+      </div>
+      <textarea id="tmSubs"></textarea>
+      <div class="hint-i" id="splitHint" style="margin-top:6px"></div>
+    </div>
     <div class="field"><label id="tmNoteLbl">备注（可选）</label><textarea id="tmNote" placeholder="想补充的一句话…" style="min-height:52px"></textarea></div>
     <div class="modal-actions">
       <button class="btn" id="tmDelete" style="color:var(--rose);border-color:#EFD6DB">删除</button>
@@ -558,11 +596,17 @@ function layoutBlock(bl,b){
 
 function blockEl(b,mid,side){
   var cat=catById(b.cat);
-  var bl=el('div','blk'+(S.focusCat&&S.focusCat!==b.cat?' dimmed':''));
+  var bl=el('div','blk'+(b.done?' done':'')+(S.focusCat&&S.focusCat!==b.cat?' dimmed':''));
   bl.style.setProperty('--hl',cat.hl);bl.style.setProperty('--tc',cat.tc);
   var range=toHM(b.start)+'–'+toHM(b.end);
-  bl.innerHTML='<div class="b-top"><span class="b-cat">'+esc(cat.name)+'</span><span class="b-time">'+range+'</span></div>'+
-    '<div class="b-title">'+esc(b.name)+'</div>';
+  var html='<div class="b-top"><span class="b-cat">'+esc(cat.name)+'</span><span class="b-time">'+range+'</span></div>';
+  if(b.name)html+='<div class="b-title">'+esc(b.name)+'</div>';
+  bl.innerHTML=html;
+  if(b.subs&&b.subs.length){
+    var ol=el('ul','b-subs');
+    b.subs.forEach(function(s){var li=el('li',s.done?'done':'');li.innerHTML='<input type="checkbox" '+(s.done?'checked':'')+'><span class="t">'+esc(s.text)+'</span>';var cb=li.querySelector('input');cb.addEventListener('pointerdown',function(e){e.stopPropagation();});cb.onclick=function(e){e.stopPropagation();s.done=this.checked;save();};ol.appendChild(li);});
+    bl.appendChild(ol);
+  }
   if(b.note)bl.appendChild(el('div','b-note',esc(b.note)));
   bl.appendChild(el('div','b-accent'));
   var topH=el('div','rz rz-top'),botH=el('div','rz rz-bot');bl.appendChild(topH);bl.appendChild(botH);
@@ -661,25 +705,36 @@ function buildBoard(m,showName){
   return wrap;
 }
 
-var editing=null,editMember='wendy',editSide='todo',pickedCat='study';
+var editing=null,editMember='wendy',editSide='todo',pickedCat='study',splitMode='blocks';
+function applySplitMode(){
+  document.querySelectorAll('#splitModeSeg button').forEach(function(b){b.classList.toggle('on',b.dataset.sm===splitMode);});
+  var ta=document.getElementById('tmSubs'),h=document.getElementById('splitHint');
+  if(splitMode==='blocks'){ta.placeholder='1. 背单词 30m\n2. 写数学practice 1h\n3. 阅读必读书目 45m';h.textContent='每行一条，按行拆成多个时间块；行尾可写用时（30m / 1h / 1:30），不写就平均分。留空则整段是一个块。';}
+  else if(splitMode==='list'){ta.placeholder='背单词\n写数学practice\n阅读必读书目';h.textContent='都放在这一个时间块里，不排具体时间、只勾选完成——「这段时间内要做完这几件事」。';}
+  else{ta.placeholder='想怎么分行就怎么分行，\n会原样放进同一个块里。';h.textContent='整块：原样保留你的换行，不拆分、不勾选，就一个块。';}
+}
 function openTask(b,mid,side,hour){
   editing=b;editMember=mid;editSide=side;
   var mm=null;for(var i=0;i<S.members.length;i++)if(S.members[i].id===mid)mm=S.members[i];
   document.getElementById('tmTitle').textContent=(b?'编辑':'新增')+(side==='todo'?' · 计划':' · 记录');
   document.getElementById('tmSub').textContent=(mm?mm.name:'')+(side==='todo'?' 想做的事':' 实际做了的事');
-  document.getElementById('tmNameLbl').textContent=side==='todo'?'想做什么':'做了什么';
+  document.getElementById('tmNameLbl').textContent=side==='todo'?'想做什么（可留空，用下面的清单/时间块）':'做了什么';
   document.getElementById('tmNoteLbl').textContent=side==='todo'?'备注（可选）':'实际记录 / 感受（可选）';
   pickedCat=b?b.cat:S.categories[0].id;
   document.getElementById('tmName').value=b?b.name:'';
   document.getElementById('tmStart').value=b?toHM(b.start):(hour!=null?pad(hour)+':00':'09:00');
   document.getElementById('tmEnd').value=b?toHM(b.end):(hour!=null?pad(Math.min(hour+1,END))+':00':'10:00');
-  document.getElementById('tmSubs').value='';
+  if(b&&b.subs&&b.subs.length){splitMode='list';document.getElementById('tmSubs').value=b.subs.map(function(s){return s.text;}).join('\n');document.getElementById('tmName').value=b.name||'';}
+  else if(b&&b.name&&b.name.indexOf('\n')>=0){splitMode='whole';document.getElementById('tmSubs').value=b.name;document.getElementById('tmName').value='';}
+  else{splitMode='blocks';document.getElementById('tmSubs').value='';document.getElementById('tmName').value=b?b.name:'';}
+  applySplitMode();
   document.getElementById('tmNote').value=b&&b.note?b.note:'';
   document.getElementById('tmDelete').style.display=b?'':'none';
   renderCatPicker();
   document.getElementById('taskOverlay').classList.add('show');
   setTimeout(function(){document.getElementById('tmName').focus();},50);
 }
+document.querySelectorAll('#splitModeSeg button').forEach(function(b){b.onclick=function(){splitMode=b.dataset.sm;applySplitMode();};});
 function renderCatPicker(){
   var c=document.getElementById('tmCats');c.innerHTML='';
   S.categories.forEach(function(cat){var o=el('span','cat-opt'+(cat.id===pickedCat?' sel':''));o.style.background=cat.hl;o.style.color=cat.tc;o.innerHTML='<span class="sw" style="background:'+cat.tc+'"></span>'+esc(cat.name);o.onclick=function(){pickedCat=cat.id;renderCatPicker();};c.appendChild(o);});
@@ -691,18 +746,33 @@ document.getElementById('tmSave').onclick=function(){
   var name=document.getElementById('tmName').value.trim();
   var s=hm(document.getElementById('tmStart').value),e=hm(document.getElementById('tmEnd').value);
   if(s==null)s=9;if(e==null||e<=s)e=Math.min(s+1,END);s=Math.max(START,s);e=Math.min(END,e);
-  var lines=parseSplitLines(document.getElementById('tmSubs').value);
+  var raw=document.getElementById('tmSubs').value;
   var note=document.getElementById('tmNote').value.trim();
   var arr=memDay(editMember)[editSide];
-  if(lines.length>=1){
-    var built=buildSplitBlocks(s,e,lines,pickedCat);
-    if(built.length===1)built[0].note=note;
-    if(editing){var idx=arr.indexOf(editing);if(idx>-1){Array.prototype.splice.apply(arr,[idx,1].concat(built));}else{built.forEach(function(b){arr.push(b);});}}
-    else{built.forEach(function(b){arr.push(b);});}
+  if(splitMode==='list'){
+    var items=parseSubs(raw);
+    if(!items.length&&!name){document.getElementById('tmSubs').focus();return;}
+    var prev=(editing&&editing.subs)?editing.subs:[];
+    var subs=items.map(function(t,i){return {text:t,done:prev[i]?prev[i].done:false};});
+    if(editing){editing.name=name;editing.cat=pickedCat;editing.start=s;editing.end=e;editing.note=note;editing.subs=subs;delete editing.open;}
+    else{arr.push({id:uid(),cat:pickedCat,name:name,start:s,end:e,note:note,subs:subs});}
+  }else if(splitMode==='whole'){
+    var body=raw.replace(/^\n+|\n+$/g,'').trim()||name;
+    if(!body){document.getElementById('tmSubs').focus();return;}
+    if(editing){editing.name=body;editing.cat=pickedCat;editing.start=s;editing.end=e;editing.note=note;delete editing.subs;delete editing.open;}
+    else{arr.push({id:uid(),cat:pickedCat,name:body,start:s,end:e,note:note});}
   }else{
-    if(!name){document.getElementById('tmName').focus();return;}
-    if(editing){editing.name=name;editing.cat=pickedCat;editing.start=s;editing.end=e;editing.note=note;delete editing.subs;delete editing.open;}
-    else{arr.push({id:uid(),cat:pickedCat,name:name,start:s,end:e,note:note});}
+    var lines=parseSplitLines(raw);
+    if(lines.length>=1){
+      var built=buildSplitBlocks(s,e,lines,pickedCat);
+      if(built.length===1)built[0].note=note;
+      if(editing){var idx=arr.indexOf(editing);if(idx>-1){Array.prototype.splice.apply(arr,[idx,1].concat(built));}else{built.forEach(function(b){arr.push(b);});}}
+      else{built.forEach(function(b){arr.push(b);});}
+    }else{
+      if(!name){document.getElementById('tmName').focus();return;}
+      if(editing){editing.name=name;editing.cat=pickedCat;editing.start=s;editing.end=e;editing.note=note;delete editing.subs;delete editing.open;}
+      else{arr.push({id:uid(),cat:pickedCat,name:name,start:s,end:e,note:note});}
+    }
   }
   save();closeTask();renderTimeline();
 };
@@ -875,7 +945,27 @@ document.getElementById('importBtn').onclick=doImport;
 
 function renderAll(){renderMembers();renderPlan();renderMatrix();renderLegend();renderTimeline();renderReview();}
 
+var ICON_COLOR='#7AAEA2';
+function makeIcon(size){try{var c=document.createElement('canvas');c.width=size;c.height=size;var x=c.getContext('2d');x.fillStyle=ICON_COLOR;x.fillRect(0,0,size,size);return c.toDataURL('image/png');}catch(e){return null;}}
+function setupPWA(){
+  var i180=makeIcon(180),i192=makeIcon(192),i512=makeIcon(512);
+  var apple=document.getElementById('appleIcon');if(apple&&i180)apple.href=i180;
+  var fav=document.getElementById('favIcon');if(fav&&i192)fav.href=i192;
+  if(!i192||!i512)return;
+  var manifest={name:'每日每日',short_name:'每日每日',start_url:'.',scope:'.',display:'standalone',background_color:'#FAF7F2',theme_color:ICON_COLOR,icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  try{var url=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));var link=document.getElementById('manifestLink');if(link)link.href=url;}catch(e){}
+}
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;});
+document.getElementById('installBtn').onclick=function(){
+  if(deferredPrompt){deferredPrompt.prompt();if(deferredPrompt.userChoice)deferredPrompt.userChoice.then(function(){deferredPrompt=null;});return;}
+  var ua=navigator.userAgent||'';
+  if(/iPhone|iPad|iPod|Macintosh/i.test(ua)&&/Safari/i.test(ua))alert('在 Safari 里点「分享」→「添加到主屏幕」，就会变成 App 图标（纯色方块）。');
+  else alert('在浏览器菜单里选「安装应用 / 添加到主屏幕」即可。\n如果没看到这个选项，说明当前是预览环境；部署到网址（https）后再打开就能装。');
+};
+
 (async function(){
+  setupPWA();
   var saved=await store.get(KEY);
   if(saved&&saved.members){S=saved;if(!S.categories)S.categories=defaultCats();if(!S.date)S.date=todayISO();if(!S.data)S.data={};if(!S.tlView)S.tlView='all';if(S.tlView==='single')S.tlView='all';S.focusCat=null;
     S.categories.forEach(function(c){if(c.id==='study'&&c.tc==='#57A05A'){c.tc='#3C6098';c.hl='#E4EAF3';}});
